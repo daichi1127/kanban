@@ -1,9 +1,9 @@
 class CardController < ApplicationController
    before_action :set_card, only: %i(show edit update destroy)
+   before_action :set_list, only: %i(new create)
 
   def new
     @card = Card.new
-    @list = List.find_by(id: params[:list_id])
   end
 
   def create
@@ -36,12 +36,16 @@ class CardController < ApplicationController
   end
   
   private
-    def card_params
-      params.require(:card).permit(:title, :memo, :list_id)
+    def set_list
+      @list = List.find_by(id: params[:list_id])
     end
-    
+
     def set_card
       @card = Card.find_by(id: params[:id])
+    end
+
+    def card_params
+      params.require(:card).permit(:title, :memo, :list_id)
     end
 
 end
